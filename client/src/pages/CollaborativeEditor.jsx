@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { io } from "socket.io-client";
 
-const socket = io("https://codecollab-server-z5wh.onrender.com/);
+const socket = io("https://codecollab-server-z5wh.onrender.com/");
 
 function CollaborativeEditor() {
   const { roomId } = useParams();
