@@ -5,12 +5,16 @@ const cors = require('cors');
 const registerSocketHandlers = require('./socket/handlers');
 
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
-// Configure CORS for React frontend
+// Configure CORS
 app.use(
   cors({
-    origin: 'http://localhost:5174',
+    origin: [
+      'http://localhost:5173',
+      'http://localhost:5174',
+      'https://collaborative-code-editor-opal.vercel.app'
+    ],
     methods: ['GET', 'POST'],
     credentials: true,
   })
@@ -24,22 +28,25 @@ const io = new Server(httpServer, {
   cors: {
     origin: [
       'http://localhost:5173',
-      'http://localhost:5174'
+      'http://localhost:5174',
+      'https://collaborative-code-editor-opal.vercel.app'
     ],
-    methods: ['GET', 'POST']
-  }
+    methods: ['GET', 'POST'],
+    credentials: true,
+  },
 });
 
 // Register socket event handlers
 registerSocketHandlers(io);
 
-// Basic health check endpoint
+// Health check
 app.get('/', (req, res) => {
-  res.json({ message: 'CodeCollab Socket.IO Server is running' });
+  res.json({
+    message: 'CodeCollab Socket.IO Server is running',
+  });
 });
 
 // Start server
 httpServer.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-  console.log(`CORS enabled for http://localhost:5174`);
 });
